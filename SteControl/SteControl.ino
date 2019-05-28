@@ -37,7 +37,7 @@ bool bLoop = false;
 //
 // stateless control
 //
-BasicControl Control{pKm01,sizeof(pKm01) / sizeof(pKm01[0]),intBounceIntervall};
+BasicControl Control{pKm01,intBounceIntervall};
 //
 ////////////////////////////////////////////////////////
 //

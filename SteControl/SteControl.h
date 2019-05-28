@@ -19,6 +19,52 @@ struct KeyMap{
   const uint8_t     hold_key;
 };
 //
+////////////////////////////////////////////////////////////////////////////////////
+// 
+// ************** AIR Glide Display M/L***********************************
+//
+// the controls on the AirGlide Display M/L from left to right:
+//
+// - Cursor-Rotary2, left side
+// - Button-Aircraft symbol (HOME)
+// - Button-Display (DSP)
+// - Button-Escape (ESC)
+// - Menu-Rotary1 , right side
+//
+//////////
+//
+// info from AirAvionic (Tobias Fetzer)
+// AirGlide          : Keyboard
+// --------------------------------
+// Rotary2            : rotate ->(KEY_UP_ARROW / KEY_DOWN_ARROW) ; press -> (KEY_ESC)
+// HOME               : KEY_F3
+// DSP                : KEY_F2
+// ESC                : KEY_F1
+// Rotary1            : rotate ->(KEY_LEFT_ARROW / KEY_RIGHT_ARROW ) ; press -> (KEY_RETURN)
+//
+//////////////////////////////////////////////////////
+//
+// ************************** SteFly RemoteControl ******************************
+//
+// all buttons & joystic controls om the SteFly :
+//
+const uint8_t ButTop_09       = 9;     // top button (Fn)
+const uint8_t ButRhUpper_14   = 14;    // upper LH button (M)
+const uint8_t ButRhLower_15   = 15;    // lower RH button (X)  
+
+const uint8_t JoyUp_02      = 2;    // joystick UP
+const uint8_t JoyDown_04    = 4;    // joystick DOWN
+const uint8_t JoyLeft_05    = 5;    // joystick LEFT
+const uint8_t JoyRight_03   = 3;    // joystick RIGHT
+const uint8_t JoyPress_06   = 6;    // joystick PRESS
+//
+//
+// the SteFly RemoteControl can issue a total of 8 different commands
+//
+const uint8_t NUM_SteCOMMANDS {8};
+//
+typedef KeyMap ArrSteKeyMap_t[NUM_SteCOMMANDS];
+//
 /////////////////////////////////////////////////////////////
 //
 // class BasicControl
@@ -44,13 +90,15 @@ struct KeyMap{
 //
 ////////////////////////////////////////////////////////////////
 //
+ const uint16_t intBounceIntervall {25};   // debounce intervall in milliseconds
+ //
 class BasicControl{
 public:
-  BasicControl(const KeyMap * const pKm, const size_t numBut, const uint16_t iBounceIv ) :  
-                                                                _iBounceIv  { iBounceIv  }, 
-                                                                _pKm        {pKm},
-                                                                _numBut     {numBut},
-                                                                _pBut       {NULL} 
+  BasicControl(const ArrSteKeyMap_t   pKm,  const uint16_t iBounceIv ) :  
+                                                                _iBounceIv    { iBounceIv  }, 
+                                                                _pKm          {pKm},
+                                                                _numCommands  {NUM_SteCOMMANDS},
+                                                                _pBut          {NULL} 
                                                                 {}   
 /////////////////////////////////////////////////////////////
 //                                                                   
@@ -64,9 +112,9 @@ public:
 //
 void setup(){
    if(_pBut == NULL){
-    _pBut = new Bounce[_numBut];
+    _pBut = new Bounce[_numCommands];
       if(_pBut != NULL){
-        for (int8_t i=0; i < _numBut;i++){
+        for (int8_t i=0; i < _numCommands;i++){
 #ifdef DEBUG          
           Serial.print(F("Inside: BasicControl.setup() , Bounce.attach() button no:" ));
           Serial.println(i);
@@ -81,7 +129,7 @@ void setup(){
 //
 void loop(){
     if(_pBut != NULL){
-      for(int8_t i = 0; i < _numBut;i++){
+      for(int8_t i = 0; i < _numCommands;i++){
         if(_pBut[i].update() && _pBut[i].fell()){
 #ifdef DEBUG          
           Serial.print(F("Inside: BasicControl.loop(), pressed: "));
@@ -110,7 +158,7 @@ protected:
 }
 /////////////////////////////////////////////
 //
-  const size_t            _numBut;
+  const size_t            _numCommands;
   const uint16_t          _iBounceIv;
   const KeyMap *  const   _pKm;
 
