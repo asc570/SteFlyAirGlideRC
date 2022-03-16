@@ -5,7 +5,7 @@
 // This sketch will drive the RemoteControl using class BasicControl.
 //
 // Type of remote control device:
-// 'SteFly Remote-Knueppelgriff' 
+// 'SteFly Remote-Knueppelgriff'
 //
 // From:
 // Stefan Langer
@@ -25,6 +25,7 @@
 //////////////////////////////////////////////////////////////////////
 //
 // #define DEBUG
+#include "DebugRelease.h"
 
 #include <Bounce2.h>
 #include <Keyboard.h>
@@ -51,7 +52,7 @@ void setup() {
 
 Control.setup();
 Keyboard.begin();
- 
+
 #ifdef DEBUG
   Serial.println(F("End: setup()"));
 #endif
